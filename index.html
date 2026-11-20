@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a3d30">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="رفيق المدينة">
+<meta name="description" content="دليلك الرقمي للمدينة المنورة">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>رفيق المدينة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;600;700&display=swap">
+<style>
+/* VOICE: warm, calm host welcoming a guest — few hues, lots of air, confident and kind
+   IDEA: a pilgrim's pocket passport — every landmark you visit earns a stamp
+   PICTURE: dusk over Madinah — Uhud behind, the green dome and minarets, palms in front
+   COLOUR and TYPE: dome emerald ground, warm stone white, lantern gold accent; Readex Pro for Arabic and Latin
+   LAYOUT: phone app shell, hero scene up top, content cards, fixed bottom tab bar */
+:root{color-scheme:light dark;
+--bg:light-dark(#f8f5ee,#081713);--card:light-dark(#ffffff,#10241e);--ink:light-dark(#10231d,#eef3ef);
+--mute:light-dark(#5b6b64,#9fb3ab);--em:light-dark(#0d5a45,#3fbf93);--emd:#0a3d30;--gold:#e0a63a;--line:light-dark(#e6e0d3,#1f3a31);
+--soft:light-dark(#eaf3ee,#12322a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Readex Pro",system-ui,sans-serif;overflow-x:clip;padding-bottom:84px}
+a{color:var(--em)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.app{max-width:620px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(14px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 14px max(16px,env(safe-area-inset-left));background:var(--emd);color:#fff}
+.brand{display:flex;align-items:center;gap:10px}
+.brand b{font-size:19px;line-height:1.1;display:block}.brand small{font-size:13px;opacity:.75}
+.beta{font-size:13px;background:var(--gold);color:#2a1a00;border-radius:99px;padding:2px 10px;font-weight:600}
+select{font:inherit;font-size:16px;min-height:44px;border-radius:12px;border:1px solid #ffffff44;background:#ffffff14;color:#fff;padding:0 10px}
+select option{color:#111}
+.hero{position:relative;background:var(--emd);color:#fff;overflow:hidden}
+.hero svg{display:block;width:100%;height:auto}
+.hero .txt{position:absolute;inset-inline:18px;top:18px}
+.hero h1{margin:0;font-size:clamp(28px,7vw,40px);line-height:1.1;text-wrap:balance;font-weight:700}
+.hero p{margin:6px 0 0;opacity:.85;max-width:30ch}
+main{padding:0 16px}
+.view{display:none;animation:in .35s ease}.view.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+h2{font-size:24px;line-height:1.2;margin:22px 0 4px}
+.lead{color:var(--mute);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0;box-shadow:0 6px 18px #0a3d3010}
+.pass{display:flex;gap:16px;align-items:center}
+.ring{flex:none;width:84px;height:84px}
+.pass h3{margin:0;font-size:18px}.pass p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.stamps{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.st{width:30px;height:30px;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;font-size:13px;color:var(--mute)}
+.st.got{border:2px solid var(--gold);background:var(--gold);color:#2a1a00;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;text-align:start;color:var(--ink);min-height:108px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.tile svg{width:30px;height:30px;color:var(--em)}
+.tile b{font-size:16px}.tile span{font-size:13px;color:var(--mute)}
+.tile.sos{background:#b3261e;color:#fff;border:0}.tile.sos svg,.tile.sos span{color:#fff}
+.place{display:grid;grid-template-columns:64px minmax(0,1fr);gap:14px}
+.ico{width:64px;height:64px;border-radius:18px;background:var(--soft);display:grid;place-items:center;color:var(--em)}
+.ico svg{width:36px;height:36px}
+.place h3{margin:0;font-size:18px}.place p{margin:4px 0 10px;color:var(--mute);font-size:15px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{min-height:44px;border-radius:14px;padding:0 16px;border:1px solid var(--line);background:var(--soft);color:var(--em);font-weight:600;display:inline-flex;align-items:center;gap:6px;text-decoration:none;font-size:15px}
+.btn.pri{background:var(--em);color:#fff;border-color:transparent}
+.btn.done{background:var(--gold);color:#2a1a00;border-color:transparent}
+.btn.done.pop{animation:stamp .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stamp{0%{transform:scale(1.6) rotate(-12deg);opacity:.3}100%{transform:none}}
+.meta{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:13px;color:var(--mute);border-top:1px dashed var(--line);margin-top:12px;padding-top:10px}
+.ok{color:var(--em);font-weight:600}.wait{color:#b7791f;font-weight:600}
+.note{background:var(--soft);border-radius:16px;padding:12px 14px;font-size:14px;color:var(--ink);margin:12px 0}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
+.chip{flex:none;min-height:44px;border-radius:99px;padding:0 16px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.chip.on{background:var(--em);color:#fff;border-color:transparent}
+.big{font-size:clamp(44px,14vw,64px);font-weight:700;line-height:1;color:#b3261e;direction:ltr;display:inline-block}
+.num{font-weight:700;font-size:22px;direction:ltr;display:inline-block;white-space:nowrap}
+.chat{display:flex;flex-direction:column;gap:10px;min-height:200px}
+.msg{max-width:86%;padding:12px 14px;border-radius:18px;font-size:15px}
+.me{align-self:flex-end;background:var(--em);color:#fff;border-end-end-radius:6px}
+.bot{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-end-start-radius:6px}
+.bot small{display:block;margin-top:6px;color:var(--mute);font-size:13px}
+form.ask{display:flex;gap:8px;position:sticky;bottom:84px;background:var(--bg);padding:10px 0}
+input{flex:1;font:inherit;font-size:16px;min-height:48px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 14px}
+nav{position:fixed;bottom:0;inset-inline:0;background:var(--card);border-top:1px solid var(--line);z-index:9}
+nav .in{max-width:620px;margin:0 auto;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+nav a{min-height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;color:var(--mute);font-size:13px;padding-bottom:env(safe-area-inset-bottom)}
+nav a svg{width:24px;height:24px}
+nav a.on{color:var(--em);font-weight:600}
+nav a.on svg{transform:translateY(-2px)}
+footer{color:var(--mute);font-size:13px;text-align:center;padding:24px 16px}
+.mode{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px;margin:14px 0 4px}
+.mode button{min-height:44px;border:0;border-radius:12px;background:transparent;color:var(--mute);font-weight:600}
+.mode button.on{background:var(--em);color:#fff}
+.jh{background:linear-gradient(135deg,#0a3d30,#14805f);color:#fff;border:0}
+.jh h3{margin:0;font-size:24px}.jh p{margin:4px 0 12px;opacity:.85}
+.jh .btn{background:var(--gold);color:#2a1a00;border:0}
+.job h3{margin:0;font-size:18px}.job .co{color:var(--mute);font-size:14px;margin:2px 0 10px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tag{font-size:13px;border-radius:99px;padding:3px 10px;background:var(--soft);color:var(--ink);white-space:nowrap}
+.tag.sal{background:#e0a63a26;color:var(--ink);font-weight:600}
+.tag.smp{background:#b3261e1a;color:#b3261e;font-weight:600}
+.dates{font-size:13px;color:var(--mute);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.fld{display:grid;gap:10px}.fld label{font-size:14px;color:var(--mute)}
+.search{width:100%;margin:4px 0 8px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+.tl li:last-child{border:0}
+.tl b{color:var(--em);font-size:14px;line-height:1.4}
+.steps{counter-reset:n;list-style:none;margin:0;padding:0}
+.steps li{counter-increment:n;display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;padding:8px 0}
+.steps li::before{content:counter(n);width:30px;height:30px;border-radius:50%;background:var(--gold);color:#2a1a00;display:grid;place-items:center;font-weight:700;font-size:14px}
+.chk{list-style:none;margin:0;padding:0}.chk li{padding:8px 0;padding-inline-start:30px;position:relative}
+.chk li::before{content:"✓";position:absolute;inset-inline-start:0;top:8px;width:22px;height:22px;border-radius:6px;background:var(--soft);color:var(--em);display:grid;place-items:center;font-weight:700;font-size:13px}
+.today{font-size:13px;background:var(--gold);color:#2a1a00;border-radius:99px;padding:1px 8px;margin-inline-start:6px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:400px){.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.tl li{grid-template-columns:6em minmax(0,1fr)}}
+.toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;font-size:14px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+@media(max-width:380px){nav a span{font-size:13px}.grid{gap:8px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+ <symbol id="i-dome" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M5 21v-6a7 7 0 0 1 14 0v6M3 21h18M9 21v-3a3 3 0 0 1 6 0v3"/></symbol>
+ <symbol id="i-bus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="15" rx="3"/><path d="M4 11h16M8 21v-3M16 21v-3"/><circle cx="8" cy="14.5" r=".6"/><circle cx="16" cy="14.5" r=".6"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+ <symbol id="i-sos" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></symbol>
+ <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+ <symbol id="i-train" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a2 2 0 0 1 2 2v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V5a2 2 0 0 1 2-2zM4 11h16M8 21l2-3M16 21l-2-3"/></symbol>
+ <symbol id="i-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 3 12l1-2 7 1 4-7h2l-2 7 5 1 1-2h2l-1 4 1 4h-2l-1-2-5 1 2 7h-2l-4-7z"/></symbol>
+ <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16V11l2-5h10l2 5v5M3 16h18v3H3zM7 19v2M17 19v2"/></symbol>
+ <symbol id="i-mount" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 20 7-12 4 6 3-4 6 10z"/></symbol>
+ <symbol id="i-tree" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9M12 12c-3-4-7-4-9-2M12 12c3-4 7-4 9-2M12 12c-1-4-4-7-8-7M12 12c1-4 4-7 8-7"/></symbol>
+ <symbol id="i-arch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V10a8 8 0 0 1 16 0v11M8 21v-8a4 4 0 0 1 8 0v8M2 21h20"/></symbol>
+ <symbol id="i-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+ <symbol id="i-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></symbol>
+ <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+ <symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19V6M3 14h18v5M21 14v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11" r="2"/></symbol>
+ <symbol id="i-cup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM17 10h1a3 3 0 0 1 0 6h-1M8 3v3M12 3v3"/></symbol>
+ <symbol id="palm" viewBox="0 0 60 120"><path d="M29 120c2-30 2-60 1-82h3c1 22 1 52-1 82z" fill="#06261d"/><path d="M31 40C20 26 6 26 0 34c10-6 22-4 31 6zM31 40c11-14 25-14 29-6-9-6-21-4-29 6zM31 40C26 22 14 14 4 16c11 2 21 10 27 24zM31 40c5-18 17-26 27-24-11 2-21 10-27 24zM31 40c-2-16 2-28 8-34-4 9-6 20-8 34z" fill="#06261d"/></symbol>
+</svg>
+
+<div class="app">
+<header>
+ <div class="brand">
+  <svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#0d5a45" stroke="#e0a63a" stroke-width="2"/><path d="M11 29v-6a9 9 0 0 1 18 0v6z" fill="#3fbf93"/><path d="M20 8v6" stroke="#e0a63a" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="7" r="2" fill="#e0a63a"/><path d="M8 29h24" stroke="#fff" stroke-width="2"/></svg>
+  <div><b data-t="name">رفيق المدينة</b><small>Rafiq Al Madinah</small></div>
+ </div>
+ <div class="row">
+  <label class="sr" for="lang" style="position:absolute;width:1px;height:1px;overflow:hidden">Language</label>
+  <select id="lang">
+   <option value="ar">العربية</option><option value="en">English</option><option value="id">Indonesia</option>
+   <option value="ur">اردو</option><option value="tr">Türkçe</option><option value="fr">Français</option>
+  </select></div>
+</header>
+
+<section class="hero" aria-hidden="true">
+ <svg viewBox="0 0 400 230" preserveAspectRatio="xMidYMax slice">
+  <defs>
+   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a3d30"/><stop offset=".55" stop-color="#2f6b55"/><stop offset="1" stop-color="#e9b45a"/></linearGradient>
+   <linearGradient id="domeG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fd6a8"/><stop offset="1" stop-color="#14805f"/></linearGradient>
+   <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6ecd8"/><stop offset="1" stop-color="#d6c3a0"/></linearGradient>
+  </defs>
+  <rect width="400" height="230" fill="url(#sky)"/>
+  <circle cx="300" cy="150" r="34" fill="#ffd98a" opacity=".85"/>
+  <g fill="#fff" opacity=".7"><circle cx="40" cy="30" r="1.2"/><circle cx="90" cy="18" r="1"/><circle cx="160" cy="40" r="1.2"/><circle cx="350" cy="22" r="1"/><circle cx="250" cy="12" r="1"/></g>
+  <path d="M0 175 60 140l40 18 50-40 60 32 50-26 70 38 70-20v80H0z" fill="#7a4a2e" opacity=".55"/>
+  <path d="M0 185 80 160l60 14 70-24 90 30 100-18v73H0z" fill="#5a3522" opacity=".6"/>
+  <g>
+   <rect x="96" y="70" width="10" height="120" fill="url(#wall)"/><path d="M93 70h16l-8-26z" fill="url(#domeG)"/><rect x="94" y="100" width="14" height="4" fill="#c8b48e"/><rect x="94" y="135" width="14" height="4" fill="#c8b48e"/>
+   <rect x="294" y="80" width="10" height="110" fill="url(#wall)"/><path d="M291 80h16l-8-26z" fill="url(#domeG)"/><rect x="292" y="110" width="14" height="4" fill="#c8b48e"/>
+   <rect x="118" y="150" width="166" height="46" fill="url(#wall)"/>
+   <g fill="#b89c6c"><path d="M130 196v-20a8 8 0 0 1 16 0v20z"/><path d="M156 196v-20a8 8 0 0 1 16 0v20z"/><path d="M230 196v-20a8 8 0 0 1 16 0v20z"/><path d="M256 196v-20a8 8 0 0 1 16 0v20z"/></g>
+   <rect x="176" y="140" width="50" height="14" fill="#efe2c6"/>
+   <path d="M174 142a27 30 0 0 1 54 0z" fill="url(#domeG)"/>
+   <path d="M201 112v-12" stroke="#e0a63a" stroke-width="3"/><circle cx="201" cy="98" r="3.5" fill="#e0a63a"/>
+   <path d="M182 136a20 22 0 0 1 12-20" stroke="#bff2dc" stroke-width="2.5" fill="none" opacity=".7"/>
+  </g>
+  <use href="#palm" x="10" y="110" width="56" height="112"/><use href="#palm" x="48" y="130" width="44" height="96"/>
+  <use href="#palm" x="330" y="104" width="60" height="120"/><use href="#palm" x="300" y="138" width="40" height="88"/>
+  <rect y="208" width="400" height="22" fill="#06261d"/>
+ </svg>
+ <div class="txt"><h1 data-t="hello">أهلًا بك في المدينة المنورة</h1><p data-t="sub">رفيقك للأماكن والخدمات والمعلومات الموثوقة خلال زيارتك.</p></div>
+</section>
+
+<main>
+ <div class="mode" role="tablist"><button data-mode="v" data-t="visitor">رفيق الزائر</button><button data-mode="c" data-t="community">رفيق المجتمع</button></div>
+ <div id="trans" class="note" hidden></div>
+
+ <section class="view" id="v-home">
+  <div id="homeC">
+   <div class="card jh"><h3 data-t="jobsName">وظائف طيبة</h3><p data-t="jobsTag">فرصتك أقرب مما تتوقع</p><button class="btn" data-go="jobs" data-t="browse">تصفح الوظائف</button></div>
+   <div class="grid">
+    <button class="tile" data-go="jobs" data-sec="noexp"><svg><use href="#i-bag"/></svg><div><b data-t="s_noexp">بدون خبرة</b></div></button>
+    <button class="tile" data-go="jobs" data-sec="grad"><svg><use href="#i-cap"/></svg><div><b data-t="s_grad">حديثو التخرج</b></div></button>
+    <button class="tile" data-go="jobs" data-sec="train"><svg><use href="#i-cap"/></svg><div><b data-t="s_train">تدريب منتهي بالتوظيف</b></div></button>
+    <button class="tile" data-go="jobs" data-sec="part"><svg><use href="#i-bag"/></svg><div><b data-t="s_part">جزئي وموسمي</b></div></button>
+   </div>
+   <div class="note" data-t="free">التسجيل والتقديم مجاني للباحثين عن عمل دائمًا. لا ننشر إعلانًا مجهولًا.</div>
+  </div>
+  <div id="homeV">
+  <div class="card pass">
+   <svg class="ring" viewBox="0 0 84 84"><circle cx="42" cy="42" r="34" fill="none" stroke="var(--line)" stroke-width="9"/><circle id="arc" cx="42" cy="42" r="34" fill="none" stroke="var(--gold)" stroke-width="9" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6" transform="rotate(-90 42 42)" style="transition:stroke-dashoffset .8s"/><text id="cnt" x="42" y="49" text-anchor="middle" font-size="20" font-weight="700" fill="var(--ink)">0/5</text></svg>
+   <div><h3 data-t="passport">جواز زيارتك</h3><p data-t="passSub">زر المعالم واجمع الأختام</p><div class="stamps" id="stamps"></div></div>
+  </div>
+  <button class="card tile jh" style="width:100%;min-height:0;text-align:start" data-go="places"><div><b data-t="rawdahT" style="font-size:20px">دليل زيارة الروضة</b><br><span data-t="rawdahS" style="color:#fff;opacity:.85">خطوات بسيطة قبل موعدك، والحجز من نسك</span></div></button>
+  <div class="grid three">
+   <button class="tile" data-go="plan"><svg><use href="#i-cal"/></svg><div><b data-t="t_plan">جدولي</b><br><span data-t="d_plan">الجمعة، السبت، رمضان</span></div></button>
+   <button class="tile" data-go="stay"><svg><use href="#i-bed"/></svg><div><b data-t="t_stay">الإقامة الآمنة</b><br><span data-t="d_stay">تحقق قبل ما تحجز</span></div></button>
+   <button class="tile" data-go="places"><svg><use href="#i-dome"/></svg><div><b data-t="t_places">اكتشف المدينة</b><br><span data-t="d_places">المعالم والمساجد</span></div></button>
+   <button class="tile" data-go="move"><svg><use href="#i-bus"/></svg><div><b data-t="t_move">كيف أصل؟</b><br><span data-t="d_move">باص، قطار، مطار</span></div></button>
+   <button class="tile" data-go="near"><svg><use href="#i-pin"/></svg><div><b data-t="t_near">قريب مني</b><br><span data-t="d_near">صيدلية، مطعم، سوق</span></div></button>
+   <button class="tile sos" data-go="help"><svg><use href="#i-sos"/></svg><div><b data-t="t_help">الطوارئ</b><br><span>911</span></div></button>
+  </div>
+  <button class="card tile" style="width:100%;min-height:0;flex-direction:row;align-items:center" data-go="ask"><svg><use href="#i-chat"/></svg><div style="flex:1"><b data-t="t_ask">اسأل رفيقك</b><br><span data-t="d_ask">أسئلة شائعة بإجابات مختصرة ومصدرها</span></div></button>
+  <div class="note" data-t="trust">كل معلومة هنا معها مصدرها وتاريخ آخر مراجعة. لا نعرض مواعيد أو أسعارًا على أنها مباشرة.</div>
+  </div>
+ </section>
+
+ <section class="view" id="v-jobs"><h2 data-t="jobsName">وظائف طيبة</h2><p class="lead" data-t="jobsLead"></p>
+  <form class="row" id="jsf" style="margin-bottom:8px"><input class="search" id="jq" type="search" autocomplete="off" style="flex:1;margin:0"><button class="btn pri" data-t="send">ابحث</button></form>
+  <div class="grid" id="sect"></div>
+  <h2 data-t="official">منصات التوظيف الرسمية</h2><div id="offj"></div>
+  <h2 data-t="emp">عندك وظيفة شاغرة؟</h2>
+  <article class="card"><p class="lead" style="margin:0 0 10px" data-t="empSub"></p><a class="btn pri" href="https://jadarat.sa" target="_blank" rel="noopener" data-t="empBtn">انشر عبر جدارات</a></article>
+ </section>
+
+
+ <section class="view" id="v-places"><h2 data-t="t_places">اكتشف المدينة</h2><p class="lead" data-t="placesLead">خمسة معالم تبدأ بها رحلتك. اضغط «ختم» عند زيارتك.</p><div id="rawdah"></div><div id="places"></div></section>
+
+ <section class="view" id="v-move"><h2 data-t="t_move">كيف أصل؟</h2><p class="lead" data-t="moveLead">خيارات التنقل مع الرابط الرسمي لكل خدمة.</p><div id="move"></div></section>
+
+ <section class="view" id="v-near"><h2 data-t="t_near">قريب مني</h2><p class="lead" data-t="nearLead">اختر ما تحتاجه، وسنفتحه لك على الخريطة.</p>
+  <div class="chips" id="where"></div><div class="grid" id="near"></div>
+  <p class="lead" style="font-size:14px" data-t="nearNote">النتائج من خرائط Google وليست قائمة معتمدة من رفيق المدينة.</p></section>
+
+ <section class="view" id="v-help"><h2 data-t="t_help">الطوارئ</h2><div id="help"></div></section>
+
+ <section class="view" id="v-plan"><h2 data-t="t_plan">جدولي</h2><p class="lead" data-t="planLead"></p>
+  <div class="chips" id="days"></div><div id="plan"></div></section>
+
+ <section class="view" id="v-stay"><h2 data-t="t_stay">الإقامة الآمنة</h2><p class="lead" data-t="stayLead"></p><div id="stay"></div></section>
+
+ <section class="view" id="v-ask"><h2 data-t="t_ask">اسأل رفيقك</h2>
+  <div class="chips" id="sugg"></div>
+  <div class="chat" id="chat" aria-live="polite"></div>
+  <form class="ask" id="askf"><input id="q" autocomplete="off"><button class="btn pri" data-t="send">اسأل</button></form>
+ </section>
+
+ <footer data-t="foot">رفيق المدينة منصة مستقلة، غير تابعة لأي جهة حكومية أو لنسك أو لهيئة تطوير المدينة.</footer>
+</main>
+</div>
+
+<nav><div class="in" id="nav"></div></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+const REV='2026-11-20';
+const SRC={
+ nusuk:['Nusuk','https://www.nusuk.sa'],
+ mda:['هيئة تطوير منطقة المدينة','https://www.mda.gov.sa'],
+ hhr:['Haramain Railway','https://hhr.sa'],
+ moh:['وزارة الصحة','https://www.moh.gov.sa'],
+ bus:['سبق، 30 سبتمبر 2026','https://sabq.org/article/ojzxai7'],
+ tkt:['Saudi Auto، نوفمبر 2026','https://saudiauto.com.sa/'],
+ cd:['الدفاع المدني عبر سبق، يوليو 2026','https://sabq.org/article/3n0os6d'],
+ ram:['عكاظ — النقل الترددي (موسم سابق)','https://www.okaz.com.sa/ampArticle/2157272'],
+ mt:['وزارة السياحة','https://www.mt.gov.sa'],
+ vmt:['عكاظ — خدمة التحقق من تراخيص الفنادق','https://www.okaz.com.sa/news/local/2187769'],
+ win:['عاجل — برنامج شتاء المدينة','https://ajel.sa/tourism/re9n0k4pau'],
+ sun:['صحيح البخاري ومسلم','https://sunnah.com'],
+ vm:['تقويم فعاليات المدينة المنورة (Visit Madinah)','https://visitmadinahsa.com/ar/events'],
+ jd:['جدارات','https://jadarat.sa']
+};
+const UI={
+ar:{name:'رفيق المدينة',beta:'تجريبي',hello:'أهلًا بك في المدينة المنورة',sub:'رفيقك للأماكن والخدمات والمعلومات الموثوقة خلال زيارتك.',passport:'جواز زيارتك',passSub:'زر المعالم واجمع الأختام',t_places:'اكتشف المدينة',d_places:'المعالم والمساجد',t_move:'كيف أصل؟',d_move:'باص، قطار، مطار',t_near:'قريب مني',d_near:'صيدلية، مطعم، سوق',t_help:'الطوارئ',t_ask:'اسأل رفيقك',d_ask:'أسئلة شائعة بإجابات مختصرة ومصدرها',trust:'كل معلومة هنا معها مصدرها وتاريخ آخر مراجعة. لا نعرض مواعيد أو أسعارًا على أنها مباشرة.',placesLead:'خمسة معالم تبدأ بها رحلتك. اضغط «ختم» عند زيارتك.',moveLead:'خيارات التنقل مع الرابط الرسمي لكل خدمة.',nearLead:'اختر ما تحتاجه، وسنفتحه لك على الخريطة.',nearNote:'النتائج من خرائط Google وليست قائمة معتمدة من رفيق المدينة.',send:'اسأل',ph:'اكتب سؤالك…',foot:'رفيق المدينة منصة مستقلة، غير تابعة لأي جهة حكومية أو لنسك أو لهيئة تطوير المدينة.',map:'الخريطة',stamp:'ختم',stamped:'تم الختم',src:'المصدر',rev:'آخر مراجعة',ok:'تم التحقق',wait:'بانتظار التحقق',copy:'نسخ الرقم',copied:'تم نسخ الرقم',open:'فتح الموقع الرسمي',nearMe:'حولي',nearHaram:'حول المسجد النبوي',home:'الرئيسية',places:'المعالم',move:'التنقل',near:'قريب',help:'طوارئ',ask:'اسأل',hi:'السلام عليكم! أنا رفيقك. اسألني عن التنقل أو الطوارئ أو المعالم.',none:'لم أجد إجابة موثوقة لهذا السؤال بعد. الأفضل مراجعة تطبيق نسك أو الجهة الرسمية.',welldone:'ما شاء الله! جمعت كل الأختام'},
+en:{name:'Rafiq Al Madinah',beta:'Beta',hello:'Welcome to Madinah',sub:'Your companion for places, services and trusted information during your visit.',passport:'Your visit passport',passSub:'Visit landmarks, collect stamps',t_places:'Discover the city',d_places:'Landmarks & mosques',t_move:'Getting around',d_move:'Bus, train, airport',t_near:'Near me',d_near:'Pharmacy, food, market',t_help:'Emergency',t_ask:'Ask Rafiq',d_ask:'Common questions, short answers, with sources',trust:'Every item shows its source and last review date. We never present times or prices as live.',placesLead:'Five landmarks to begin with. Tap “Stamp” when you visit.',moveLead:'Ways to get around, each with its official link.',nearLead:'Pick what you need and we’ll open it on the map.',nearNote:'Results come from Google Maps, not a list endorsed by Rafiq.',send:'Ask',ph:'Type your question…',foot:'Rafiq Al Madinah is independent and not affiliated with any government body, Nusuk or the Madinah Region Development Authority.',map:'Map',stamp:'Stamp',stamped:'Stamped',src:'Source',rev:'Last reviewed',ok:'Verified',wait:'Pending check',copy:'Copy number',copied:'Number copied',open:'Official site',nearMe:'Around me',nearHaram:'Around the Prophet’s Mosque',home:'Home',places:'Places',move:'Transport',near:'Nearby',help:'SOS',ask:'Ask',hi:'Assalamu alaikum! I’m Rafiq. Ask me about transport, emergencies or landmarks.',none:'I don’t have a verified answer for that yet. Please check the Nusuk app or the official authority.',welldone:'MashaAllah! All stamps collected'},
+id:{name:'Rafiq Al Madinah',beta:'Uji coba',hello:'Selamat datang di Madinah',sub:'Teman Anda untuk tempat, layanan, dan informasi tepercaya.',passport:'Paspor kunjungan',passSub:'Kunjungi tempat, kumpulkan stempel',t_places:'Jelajahi kota',d_places:'Situs & masjid',t_move:'Transportasi',d_move:'Bus, kereta, bandara',t_near:'Di dekat saya',d_near:'Apotek, makan, pasar',t_help:'Darurat',t_ask:'Tanya Rafiq',d_ask:'Pertanyaan umum dengan sumber',trust:'Setiap info menampilkan sumber dan tanggal tinjauan terakhir.',placesLead:'Lima tempat untuk memulai. Ketuk “Stempel” saat berkunjung.',moveLead:'Pilihan transportasi dengan tautan resmi.',nearLead:'Pilih kebutuhan Anda, kami buka di peta.',nearNote:'Hasil dari Google Maps, bukan daftar resmi Rafiq.',send:'Tanya',ph:'Tulis pertanyaan…',foot:'Rafiq Al Madinah adalah platform independen, tidak berafiliasi dengan instansi pemerintah mana pun.',map:'Peta',stamp:'Stempel',stamped:'Tercap',src:'Sumber',rev:'Ditinjau',ok:'Terverifikasi',wait:'Menunggu cek',copy:'Salin nomor',copied:'Nomor disalin',open:'Situs resmi',nearMe:'Di sekitar saya',nearHaram:'Sekitar Masjid Nabawi',home:'Beranda',places:'Tempat',move:'Transpor',near:'Dekat',help:'Darurat',ask:'Tanya',hi:'Assalamu’alaikum! Tanyakan tentang transportasi, darurat, atau tempat.',none:'Belum ada jawaban terverifikasi. Silakan cek aplikasi Nusuk.',welldone:'MasyaAllah! Semua stempel terkumpul',tr:'Konten rinci sementara ditampilkan dalam bahasa Inggris sampai terjemahan ditinjau.'},
+ur:{name:'رفیقِ مدینہ',beta:'آزمائشی',hello:'مدینہ منورہ میں خوش آمدید',sub:'آپ کی زیارت میں مقامات، خدمات اور مستند معلومات کا ساتھی۔',passport:'آپ کا زیارت پاسپورٹ',passSub:'مقامات دیکھیں، مہریں جمع کریں',t_places:'شہر دیکھیں',d_places:'مقامات اور مساجد',t_move:'کیسے پہنچیں؟',d_move:'بس، ٹرین، ایئرپورٹ',t_near:'میرے قریب',d_near:'فارمیسی، کھانا، بازار',t_help:'ایمرجنسی',t_ask:'رفیق سے پوچھیں',d_ask:'عام سوالات، مختصر جواب، ماخذ کے ساتھ',trust:'ہر معلومات کے ساتھ ماخذ اور آخری جائزے کی تاریخ ہے۔',placesLead:'شروع کرنے کے لیے پانچ مقامات۔ زیارت پر «مہر» دبائیں۔',moveLead:'سفر کے ذرائع، سرکاری لنک کے ساتھ۔',nearLead:'جو چاہیے منتخب کریں، ہم نقشے پر کھول دیں گے۔',nearNote:'نتائج Google Maps سے ہیں۔',send:'پوچھیں',ph:'اپنا سوال لکھیں…',foot:'رفیقِ مدینہ ایک آزاد پلیٹ فارم ہے، کسی سرکاری ادارے سے وابستہ نہیں۔',map:'نقشہ',stamp:'مہر',stamped:'مہر لگ گئی',src:'ماخذ',rev:'آخری جائزہ',ok:'تصدیق شدہ',wait:'تصدیق باقی',copy:'نمبر کاپی کریں',copied:'نمبر کاپی ہو گیا',open:'سرکاری ویب سائٹ',nearMe:'میرے آس پاس',nearHaram:'مسجد نبوی کے آس پاس',home:'ہوم',places:'مقامات',move:'سفر',near:'قریب',help:'ایمرجنسی',ask:'پوچھیں',hi:'السلام علیکم! سفر، ایمرجنسی یا مقامات کے بارے میں پوچھیں۔',none:'ابھی اس کا مستند جواب نہیں۔ براہ کرم نسک ایپ دیکھیں۔',welldone:'ماشاءاللہ! تمام مہریں جمع ہو گئیں',tr:'تفصیلی مواد ترجمے کے جائزے تک عارضی طور پر انگریزی میں ہے۔'},
+tr:{name:'Rafiq Al Madinah',beta:'Beta',hello:'Medine’ye hoş geldiniz',sub:'Ziyaretinizde mekânlar, hizmetler ve güvenilir bilgiler için yol arkadaşınız.',passport:'Ziyaret pasaportunuz',passSub:'Mekânları gezin, mühür toplayın',t_places:'Şehri keşfet',d_places:'Mekânlar ve camiler',t_move:'Ulaşım',d_move:'Otobüs, tren, havalimanı',t_near:'Yakınımda',d_near:'Eczane, yemek, çarşı',t_help:'Acil durum',t_ask:'Rafiq’e sor',d_ask:'Sık sorulan sorular, kaynaklı',trust:'Her bilgide kaynak ve son inceleme tarihi bulunur.',placesLead:'Başlamak için beş mekân. Ziyarette “Mühür”e dokunun.',moveLead:'Resmî bağlantılarıyla ulaşım seçenekleri.',nearLead:'İhtiyacınızı seçin, haritada açalım.',nearNote:'Sonuçlar Google Haritalar’dan gelir.',send:'Sor',ph:'Sorunuzu yazın…',foot:'Rafiq Al Madinah bağımsız bir platformdur; hiçbir resmî kurumla bağlantılı değildir.',map:'Harita',stamp:'Mühür',stamped:'Mühürlendi',src:'Kaynak',rev:'Son inceleme',ok:'Doğrulandı',wait:'Kontrol bekliyor',copy:'Numarayı kopyala',copied:'Numara kopyalandı',open:'Resmî site',nearMe:'Çevremde',nearHaram:'Mescid-i Nebevî çevresi',home:'Ana sayfa',places:'Mekânlar',move:'Ulaşım',near:'Yakın',help:'Acil',ask:'Sor',hi:'Selamün aleyküm! Ulaşım, acil durum veya mekânlar hakkında sorun.',none:'Henüz doğrulanmış bir cevap yok. Lütfen Nusuk uygulamasına bakın.',welldone:'Maşallah! Tüm mühürler toplandı',tr:'Ayrıntılı içerik, çeviri incelenene kadar geçici olarak İngilizcedir.'},
+fr:{name:'Rafiq Al Madinah',beta:'Bêta',hello:'Bienvenue à Médine',sub:'Votre compagnon pour les lieux, services et informations fiables pendant votre visite.',passport:'Votre passeport de visite',passSub:'Visitez les lieux, collectez les tampons',t_places:'Découvrir la ville',d_places:'Lieux et mosquées',t_move:'Se déplacer',d_move:'Bus, train, aéroport',t_near:'Près de moi',d_near:'Pharmacie, repas, marché',t_help:'Urgence',t_ask:'Demander à Rafiq',d_ask:'Questions fréquentes, avec sources',trust:'Chaque information indique sa source et sa date de vérification.',placesLead:'Cinq lieux pour commencer. Touchez « Tampon » lors de votre visite.',moveLead:'Moyens de transport avec leur lien officiel.',nearLead:'Choisissez votre besoin, nous l’ouvrons sur la carte.',nearNote:'Résultats issus de Google Maps.',send:'Demander',ph:'Écrivez votre question…',foot:'Rafiq Al Madinah est une plateforme indépendante, sans lien avec aucun organisme officiel.',map:'Carte',stamp:'Tampon',stamped:'Tamponné',src:'Source',rev:'Vérifié le',ok:'Vérifié',wait:'À vérifier',copy:'Copier le numéro',copied:'Numéro copié',open:'Site officiel',nearMe:'Autour de moi',nearHaram:'Autour de la Mosquée du Prophète',home:'Accueil',places:'Lieux',move:'Transport',near:'Proche',help:'Urgence',ask:'Demander',hi:'Assalamu alaikum ! Posez-moi vos questions sur le transport, les urgences ou les lieux.',none:'Pas encore de réponse vérifiée. Consultez l’application Nusuk.',welldone:'MachaAllah ! Tous les tampons collectés',tr:'Le contenu détaillé est provisoirement en anglais jusqu’à la révision des traductions.'}
+};
+const X={
+ar:{visitor:'رفيق الزائر',community:'رفيق المجتمع',hello2:'أهلًا بأهل طيبة',sub2:'وظائف وفرص وخدمات محلية لأهل المدينة، طوال السنة.',jobs:'وظائف',jobsName:'وظائف طيبة',jobsTag:'فرصتك أقرب مما تتوقع',browse:'تصفح الوظائف',free:'التقديم مجاني دائمًا للباحثين عن عمل، ونوجّهك للمنصات الرسمية مباشرة.',sampleNote:'الإعلانات التالية أمثلة توضيحية لشكل القسم وليست وظائف حقيقية. ننشر الوظائف الحقيقية بعد التحقق منها مع أصحاب العمل.',sample:'مثال',nd:'الراتب غير معلن',sar:'ر.س',posted:'نُشرت',deadline:'آخر موعد',apply:'قدّم لدى صاحب العمل',sampleBtn:'مثال — لا يمكن التقديم',save:'حفظ',saved:'محفوظة',expired:'حُذفت {n} وظيفة منتهية تلقائيًا.',noRes:'لا توجد وظائف مطابقة الآن. جرّب تصنيفًا آخر.',official:'منصات التوظيف الرسمية',emp:'عندك وظيفة شاغرة؟',empSub:'النشر مجاني في المرحلة الأولى. عبّئ البيانات وسنجهّز لك نص الإعلان لإرساله لفريق رفيق المدينة.',f_co:'اسم المنشأة',f_role:'المسمى الوظيفي',f_sal:'الراتب (اختياري)',f_contact:'رقم أو بريد التواصل الرسمي',prep:'جهّز الإعلان',prepped:'تم نسخ نص الإعلان',jq:'ابحث بالمسمى أو المنشأة…',s_all:'الكل',s_priv:'قطاع خاص',s_hosp:'فنادق ومطاعم ومقاهٍ',s_health:'صحي',s_ind:'شركات ومصانع',s_grad:'حديثو التخرج',s_noexp:'بدون خبرة',s_part:'جزئي وموسمي',s_train:'تدريب منتهي بالتوظيف'},
+en:{visitor:'Visitor',community:'Community',hello2:'Welcome, people of Taibah',sub2:'Jobs, opportunities and local services for Madinah, all year round.',jobs:'Jobs',jobsName:'Taibah Jobs',jobsTag:'Your chance is closer than you think',browse:'Browse jobs',free:'Applying is always free — we send you straight to official platforms.',sampleNote:'The listings below are illustrative samples, not real jobs. Real vacancies are published after we verify them with employers.',sample:'Sample',nd:'Salary not disclosed',sar:'SAR',posted:'Posted',deadline:'Deadline',apply:'Apply with employer',sampleBtn:'Sample — cannot apply',save:'Save',saved:'Saved',expired:'{n} expired job(s) removed automatically.',noRes:'No matching jobs right now. Try another category.',official:'Official job platforms',emp:'Have a vacancy?',empSub:'Posting is free in the first phase. Fill in the details and we’ll prepare the ad text to send to the Rafiq team.',f_co:'Company name',f_role:'Job title',f_sal:'Salary (optional)',f_contact:'Official contact number or email',prep:'Prepare the ad',prepped:'Ad text copied',jq:'Search by title or company…',s_all:'All',s_priv:'Private sector',s_hosp:'Hotels & cafés',s_health:'Health',s_ind:'Companies & factories',s_grad:'New graduates',s_noexp:'No experience',s_part:'Part‑time & seasonal',s_train:'Training to hire'},
+id:{visitor:'Pengunjung',community:'Komunitas',hello2:'Selamat datang, warga Thaibah',sub2:'Lowongan, peluang, dan layanan lokal sepanjang tahun.',jobs:'Kerja',jobsName:'Lowongan Thaibah',jobsTag:'Peluang Anda lebih dekat',browse:'Lihat lowongan',free:'Melamar selalu gratis. Tanpa iklan anonim.',s_all:'Semua',s_priv:'Swasta',s_hosp:'Hotel & kafe',s_health:'Kesehatan',s_ind:'Perusahaan & pabrik',s_grad:'Lulusan baru',s_noexp:'Tanpa pengalaman',s_part:'Paruh waktu',s_train:'Pelatihan kerja',official:'Platform kerja resmi',emp:'Punya lowongan?',jq:'Cari jabatan atau perusahaan…'},
+ur:{visitor:'زائر',community:'کمیونٹی',hello2:'اہلِ طیبہ، خوش آمدید',sub2:'مدینہ کے لیے ملازمتیں، مواقع اور مقامی خدمات، سال بھر۔',jobs:'ملازمتیں',jobsName:'طیبہ ملازمتیں',jobsTag:'آپ کا موقع قریب ہے',browse:'ملازمتیں دیکھیں',free:'درخواست ہمیشہ مفت ہے۔ کوئی گمنام اشتہار نہیں۔',s_all:'سب',s_priv:'نجی شعبہ',s_hosp:'ہوٹل اور کیفے',s_health:'صحت',s_ind:'کمپنیاں اور فیکٹریاں',s_grad:'نئے گریجویٹ',s_noexp:'بغیر تجربہ',s_part:'جز وقتی',s_train:'تربیت برائے ملازمت',official:'سرکاری ملازمت پلیٹ فارم',emp:'آسامی خالی ہے؟',jq:'عہدہ یا ادارہ تلاش کریں…'},
+tr:{visitor:'Ziyaretçi',community:'Topluluk',hello2:'Hoş geldiniz, Tayyibe halkı',sub2:'Medine için iş, fırsat ve yerel hizmetler, yıl boyu.',jobs:'İşler',jobsName:'Tayyibe İşleri',jobsTag:'Fırsatınız düşündüğünüzden yakın',browse:'İlanlara göz at',free:'Başvuru her zaman ücretsiz. Anonim ilan yok.',s_all:'Tümü',s_priv:'Özel sektör',s_hosp:'Otel ve kafe',s_health:'Sağlık',s_ind:'Şirket ve fabrika',s_grad:'Yeni mezun',s_noexp:'Deneyimsiz',s_part:'Yarı zamanlı',s_train:'İstihdamlı eğitim',official:'Resmî iş platformları',emp:'Açık pozisyonunuz mu var?',jq:'Pozisyon veya şirket ara…'},
+fr:{visitor:'Visiteur',community:'Communauté',hello2:'Bienvenue, habitants de Taïba',sub2:'Emplois, opportunités et services locaux, toute l’année.',jobs:'Emplois',jobsName:'Emplois Taïba',jobsTag:'Votre chance est plus proche',browse:'Voir les offres',free:'Postuler est toujours gratuit. Aucune annonce anonyme.',s_all:'Tout',s_priv:'Secteur privé',s_hosp:'Hôtels et cafés',s_health:'Santé',s_ind:'Entreprises et usines',s_grad:'Jeunes diplômés',s_noexp:'Sans expérience',s_part:'Temps partiel',s_train:'Formation-embauche',official:'Plateformes officielles',emp:'Un poste à pourvoir ?',jq:'Chercher un poste ou une entreprise…'}
+};
+for(const k in X)Object.assign(UI[k],X[k]);
+const Y={
+ar:{t_plan:'جدولي',d_plan:'الجمعة، السبت، رمضان',t_stay:'الإقامة الآمنة',d_stay:'تحقق قبل ما تحجز',rawdahT:'دليل زيارة الروضة',rawdahS:'خطوات بسيطة قبل موعدك، والحجز من نسك',planLead:'اقتراحات ليومك حسب اليوم والموسم. الأوقات تقريبية وليست مواعيد رسمية.',stayLead:'رفيق المدينة لا يستلم أموالًا ولا يؤكد حجوزات. نساعدك تتأكد أن السكن مرخّص قبل ما تدفع.',plan:'جدولي',stay:'الإقامة',todayL:'اليوم',d_fri:'الجمعة',d_sat:'السبت',d_week:'أيام الأسبوع',d_wknd:'الويكند',d_ram:'رمضان',d_ev:'الفعاليات',cafes:'مقاهٍ قريبة',food:'مطاعم قريبة',bookN:'احجز من نسك'},
+en:{t_plan:'My day',d_plan:'Friday, Saturday, Ramadan',t_stay:'Safe stay',d_stay:'Check before you book',rawdahT:'Rawdah visit guide',rawdahS:'Simple steps before your slot — booking stays in Nusuk',planLead:'Suggestions by day and season. Times are approximate, not official schedules.',stayLead:'Rafiq never takes payments or confirms bookings. We help you check the stay is licensed before you pay.',plan:'My day',stay:'Stay',todayL:'Today',d_fri:'Friday',d_sat:'Saturday',d_week:'Weekdays',d_wknd:'Weekend',d_ram:'Ramadan',d_ev:'Events',cafes:'Cafés nearby',food:'Restaurants nearby',bookN:'Book in Nusuk'},
+id:{plan:'Jadwal',stay:'Inap',t_plan:'Jadwal saya',t_stay:'Penginapan aman',rawdahT:'Panduan Raudhah',d_fri:'Jumat',d_sat:'Sabtu',d_week:'Hari kerja',d_wknd:'Akhir pekan',d_ram:'Ramadan',d_ev:'Acara',todayL:'Hari ini'},
+ur:{plan:'شیڈول',stay:'رہائش',t_plan:'میرا دن',t_stay:'محفوظ رہائش',rawdahT:'روضہ زیارت گائیڈ',d_fri:'جمعہ',d_sat:'ہفتہ',d_week:'ہفتے کے دن',d_wknd:'ویک اینڈ',d_ram:'رمضان',d_ev:'تقریبات',todayL:'آج'},
+tr:{plan:'Günüm',stay:'Konaklama',t_plan:'Günüm',t_stay:'Güvenli konaklama',rawdahT:'Ravza ziyaret rehberi',d_fri:'Cuma',d_sat:'Cumartesi',d_week:'Hafta içi',d_wknd:'Hafta sonu',d_ram:'Ramazan',d_ev:'Etkinlikler',todayL:'Bugün'},
+fr:{plan:'Ma journée',stay:'Séjour',t_plan:'Ma journée',t_stay:'Séjour sûr',rawdahT:'Guide de la Rawdah',d_fri:'Vendredi',d_sat:'Samedi',d_week:'Semaine',d_wknd:'Week-end',d_ram:'Ramadan',d_ev:'Événements',todayL:'Aujourd’hui'}
+};
+for(const k in Y)Object.assign(UI[k],Y[k]);
+const Z={ar:{jobsLead:'ابحث عن وظائف المدينة المنورة حسب القطاع، أو قدّم عبر المنصات الرسمية مباشرة. التقديم مجاني دائمًا.',empSub:'انشر وظيفتك على المنصة الوطنية الموحدة للتوظيف ليصل إعلانك للباحثين عن عمل في المدينة.',empBtn:'انشر عبر جدارات',jq:'مثل: محاسب، كاشير، ممرض…',inMad:'وظائف في المدينة',until:'حتى',daily:'يوميًا',evLead:'فعاليات حقيقية من تقويم شتاء المدينة الرسمي. الفعالية المنتهية تختفي تلقائيًا.',evAll:'التقويم الكامل',wait:'راجع المصدر'},
+en:{jobsLead:'Search Madinah jobs by sector, or apply directly on the official platforms. Applying is always free.',empSub:'Post your vacancy on the national unified jobs platform to reach job seekers in Madinah.',empBtn:'Post on Jadarat',jq:'e.g. accountant, cashier, nurse…',inMad:'Jobs in Madinah',until:'until',daily:'Daily',evLead:'Real events from the official Madinah Winter calendar. Ended events disappear automatically.',evAll:'Full calendar',wait:'Check source'}};
+for(const k in Z)Object.assign(UI[k],Z[k]);
+const EV=[
+ {s:'2026-11-18',e:'2026-11-21',ar:['مسرحية سديم','تعيدك إلى أسواق المدينة وعاداتها قبل مئة عام','18–21 نوفمبر'],en:['Sadeem — theatre','Madinah’s markets and customs a century ago','18–21 Nov']},
+ {s:'2026-11-01',e:'2027-03-31',ar:['سوق الجمعة','منتجات محلية وأكلات شعبية وحرفيون في سوق واحد','كل جمعة حتى نهاية مارس'],en:['Friday Market','Local products, traditional food and artisans','Every Friday until end of March']},
+ {s:'2026-11-01',e:'2027-03-31',ar:['شارع الحي','ثلاثة مسارات ثقافية تعرض لغة المدينة وتراثها وفنونها','يوميًا حتى نهاية مارس'],en:['Al‑Hayy Street','Three cultural routes on Madinah’s language, heritage and arts','Daily until end of March']},
+ {s:'2026-11-28',e:'2026-11-28',ar:['رحلة تعرّف على المدينة','رحلة عائلية بين حكايات المدينة ومعالمها','28 نوفمبر'],en:['Get to know Madinah trip','Family trip through the city’s stories and landmarks','28 Nov']},
+ {s:'2026-12-05',e:'2026-12-05',ar:['رحلة جبل عير «أفلا يتفكرون» — للسيدات','رحلة تأمل واستكشاف للجبل','5 ديسمبر'],en:['Jabal Ayr trip — women','Reflection and mountain exploration','5 Dec']},
+ {s:'2026-12-05',e:'2027-03-31',ar:['شروق الجبل','صعود قبل الفجر مع مرشدين، يُختتم بإفطار وإطلالة على المدينة — جبل عير','كل سبت، ديسمبر – مارس'],en:['Mountain Sunrise','Guided pre‑dawn climb with breakfast and city views — Jabal Ayr','Every Saturday, Dec – Mar']},
+ {s:'2026-12-10',e:'2026-12-17',ar:['أسبوع الثقافة المدينية','أدب وموسيقى وعروض تفاعلية','10–17 ديسمبر'],en:['Madinah Culture Week','Literature, music and interactive shows','10–17 Dec']},
+ {s:'2026-12-12',e:'2026-12-17',ar:['مهرجان المدينة المنورة الدولي للعمارة 2026','معماريون ومطورون وخبراء في مستقبل المدن','12–17 ديسمبر'],en:['Madinah International Architecture Festival 2026','Architects, developers and future‑city experts','12–17 Dec']},
+ {s:'2026-11-01',e:'2027-02-28',ar:['ليلة بدرية','أمسية تحت ضوء القمر على قمة جبل عير','14–15 من كل شهر هجري حتى فبراير'],en:['Full‑moon night','Moonlit evening on the Jabal Ayr summit','14–15 of each lunar month until Feb']},
+ {s:'2027-01-09',e:'2027-01-09',ar:['باكثون جبل عير','تحدي دراجات بإطلالات واسعة على المدينة','9 يناير'],en:['Jabal Ayr bike challenge','Cycling challenge with wide city views','9 Jan']},
+ {s:'2027-01-12',e:'2027-01-12',ar:['ماراثون الحي','سباق للعائلات والشباب والزوار ينتهي بإطلالة جبلية','12 يناير'],en:['Al‑Hayy Marathon','Race for families, youth and visitors','12 Jan']},
+ {s:'2027-02-20',e:'2027-02-25',ar:['مهرجان التمر والقهوة','تحميص قهوة مباشر ومسابقات ومنتجات المزارعين','20–25 فبراير'],en:['Dates & Coffee Festival','Live roasting, competitions and farmers’ produce','20–25 Feb']}
+];
+const MQ=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const RAWDAH={s:'nusuk',ar:['احجز موعدك من تطبيق نسك، والتصريح مجاني.','تأكد من التاريخ والوقت؛ أوقات الرجال والنساء منفصلة.','احضر قبل موعدك بوقت كافٍ، والتصريح (QR) جاهز في جوالك.','ادخل من المسار المخصص واتبع إرشادات المنظمين.','التزم بالمدة المحددة، وأفسح المجال لغيرك.'],en:['Book your slot in the Nusuk app — the permit is free.','Check date and time; men and women have separate times.','Arrive early with your permit QR ready on your phone.','Use the designated entrance and follow the organisers.','Keep to your allotted time and make room for others.']};
+const DAYS=['fri','sat','week','wknd','ram','ev'];
+const PLAN={
+ fri:{s:'nusuk',ok:0,ar:[['بعد الفجر','جلسة هادئة في ساحات المسجد النبوي وإفطار خفيف'],['الضحى','توجّه لصلاة الجمعة مبكرًا؛ الساحات تمتلئ قبل الأذان بوقت طويل'],['بعد الجمعة','غداء بعيدًا قليلًا عن المنطقة المركزية لتجنّب زحام الخروج'],['العصر','مشوار إلى قباء عبر الممشى، وقهوة في المقاهي القريبة'],['المغرب','العودة للمسجد النبوي'],['طوال اليوم','«سوق الجمعة» ضمن شتاء المدينة: منتجات محلية وأكلات شعبية، كل جمعة حتى نهاية مارس']],en:[['After Fajr','Quiet time in the Prophet’s Mosque courtyards and a light breakfast'],['Mid‑morning','Head to Jumu’ah early — courtyards fill long before the adhan'],['After Jumu’ah','Lunch a little away from the Central Area to avoid the crowd'],['Asr','Walk to Quba along the walkway, coffee at cafés nearby'],['Maghrib','Back to the Prophet’s Mosque'],['All day','“Friday Market” (Madinah Winter): local products and traditional food, every Friday until end of March']],links:[['cafes','cafes near Quba Mosque Madinah'],['food','restaurants near Al-Masjid an-Nabawi']]},
+ sat:{s:'sun',ok:1,ar:[['السنّة','كان النبي ﷺ يأتي مسجد قباء كل سبت ماشيًا وراكبًا (متفق عليه)'],['الصباح','تطهّر في مكانك ثم صلِّ في مسجد قباء'],['قبل الظهر','ممشى قباء والمقاهي على الطريق'],['العصر','مسجد القبلتين'],['المساء','السوق القريب من فندقك']],en:[['Sunnah','The Prophet ﷺ used to visit Quba every Saturday, walking or riding (Bukhari & Muslim)'],['Morning','Make wudu where you stay, then pray at Quba Mosque'],['Late morning','The Quba walkway and its cafés'],['Asr','Masjid Al‑Qiblatain'],['Evening','A market near your hotel']],links:[['cafes','cafes near Quba Mosque Madinah']]},
+ week:{s:'mda',ok:0,ar:[['الصباح الباكر','جبل أحد ومقبرة الشهداء قبل اشتداد الحر'],['الضحى','مسجد القبلتين'],['الظهيرة','راحة في الفندق'],['العصر','البقيع (حسب أوقات الزيارة المعلنة)'],['المساء','مطعم وجولة في الأسواق']],en:[['Early morning','Mount Uhud and the Martyrs’ Cemetery before the heat'],['Mid‑morning','Masjid Al‑Qiblatain'],['Midday','Rest at your hotel'],['Asr','Al‑Baqi’ (check announced visiting times)'],['Evening','Dinner and the markets']],links:[['food','restaurants Madinah']]},
+ wknd:{s:'vm',ok:1,ar:[['الخميس مساءً','«شارع الحي»: مسارات ثقافية يومية حتى نهاية مارس'],['الجمعة','صلاة الجمعة ثم «سوق الجمعة»'],['السبت فجرًا','«شروق الجبل» في جبل عير، كل سبت من ديسمبر إلى مارس'],['السبت ضحى','زيارة مسجد قباء']],en:[['Thursday evening','“Al‑Hayy Street” cultural routes, daily until end of March'],['Friday','Jumu’ah, then the “Friday Market”'],['Saturday dawn','“Mountain Sunrise” on Jabal Ayr, every Saturday Dec–Mar'],['Saturday morning','Visit Quba Mosque']],links:[['cafes','cafes Madinah']]},
+ ram:{s:'ram',ok:0,ar:[['قبل رمضان','احجز سكنك مبكرًا من منشأة مرخّصة، وتحقق من ترخيصها'],['العصر','في المواسم السابقة بدأ النقل الترددي إلى المسجد النبوي من الثالثة عصرًا من محطات خارج المنطقة المركزية'],['المغرب','الإفطار في المسجد النبوي'],['بعد القيام','آخر الحافلات الترددية تكون عادة بعد صلاة القيام بقليل'],['العشر الأواخر','تزيد الرحلات ويزيد الزحام؛ خطّط لعودتك مسبقًا']],en:[['Before Ramadan','Book early with a licensed property and verify its licence'],['Asr','In past seasons shuttle buses to the Prophet’s Mosque started at 3 pm from stations outside the Central Area'],['Maghrib','Iftar at the Prophet’s Mosque'],['After Qiyam','Last shuttles usually run shortly after Qiyam prayer'],['Last ten nights','More trips and bigger crowds — plan your return ahead']]},
+ ev:{s:'win',ok:0}
+};
+const EVENTS=[{ar:['أمسية تراثية مدينية','حديقة عامة — مساء الخميس','عائلي'],en:['Madinah heritage evening','Public park — Thursday evening','Family']},{ar:['سوق المزارعين والتمور','ساحة مفتوحة — السبت صباحًا','مجاني'],en:['Farmers’ & dates market','Open square — Saturday morning','Free']},{ar:['جولة مشي في معالم السيرة','نقطة انطلاق قرب قباء','بتسجيل مسبق'],en:['Seerah landmarks walking tour','Start point near Quba','Registration required']}];
+const STAY={ar:['تحقق من ترخيص الفندق أو الشقة عبر موقع وزارة السياحة.','احجز من قناة الفندق الرسمية أو منصة حجز مرخّصة.','اطلب تأكيدًا مكتوبًا فيه الاسم والتاريخ والسعر.','لا تحوّل مبالغ لحساب شخصي أو لوسيط مجهول.','عند أي مشكلة: المركز الموحد للسياحة 930.'],en:['Verify the hotel or apartment licence on the Ministry of Tourism site.','Book through the hotel’s official channel or a licensed platform.','Get a written confirmation with name, dates and price.','Never transfer money to a personal account or unknown broker.','Any problem: Unified Tourism Center 930.']};
+const todayKey=({5:'fri',6:'sat'})[new Date().getDay()]||'week';
+let day=todayKey;
+const SECTS=['all','priv','hosp','health','ind','grad','noexp','part','train'];
+const D=n=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)};
+const SKW={priv:'',hosp:'hotel restaurant cafe',health:'hospital pharmacist nurse',ind:'factory technician',grad:'graduate',noexp:'entry level',part:'part time',train:'internship trainee'};
+const LI=k=>'https://www.linkedin.com/jobs/search/?keywords='+encodeURIComponent(k)+'&location='+encodeURIComponent('Medina, Saudi Arabia');
+const OFFJ=[['جدارات — المنصة الوطنية الموحدة للتوظيف','Jadarat — national unified jobs platform','https://jadarat.sa'],['صندوق تنمية الموارد البشرية (هدف)','HRDF','https://www.hrdf.org.sa'],['منصة قوى','Qiwa','https://qiwa.sa']];
+const PLACES=[
+ {id:'nabawi',ic:'i-dome',ll:'24.4672,39.6111',s:'nusuk',ar:['المسجد النبوي','ثاني الحرمين الشريفين وقلب المدينة. زيارة الروضة الشريفة تحتاج تصريحًا مسبقًا عبر تطبيق نسك.'],en:['The Prophet’s Mosque','The second holiest mosque and the heart of the city. Visiting Al‑Rawdah requires a prior permit through the Nusuk app.']},
+ {id:'quba',ic:'i-arch',ll:'24.4393,39.6173',s:'mda',ar:['مسجد قباء','أول مسجد بُني في الإسلام، على بُعد نحو 3.5 كم جنوب المسجد النبوي، ويمكن الوصول إليه مشيًا عبر ممشى مخصص.'],en:['Quba Mosque','The first mosque built in Islam, about 3.5 km south of the Prophet’s Mosque, reachable on foot via a dedicated walkway.']},
+ {id:'uhud',ic:'i-mount',ll:'24.5017,39.6119',s:'mda',ar:['جبل أحد ومقبرة الشهداء','موقع غزوة أحد، وبجواره مقبرة شهداء أحد وجبل الرماة شمال المدينة.'],en:['Mount Uhud & Martyrs’ Cemetery','Site of the Battle of Uhud, with the martyrs’ cemetery and Archers’ Hill at its foot, north of the city.']},
+ {id:'qiblatain',ic:'i-arch',ll:'24.4842,39.5789',s:'mda',ar:['مسجد القبلتين','المسجد الذي شهد تحويل القبلة من بيت المقدس إلى الكعبة المشرفة.'],en:['Masjid Al‑Qiblatain','The mosque where the qibla was changed from Jerusalem to the Kaaba.']},
+ {id:'baqi',ic:'i-tree',ll:'24.4673,39.6160',s:'nusuk',ar:['البقيع','مقبرة أهل المدينة الأولى، شرق المسجد النبوي، ويُدفن فيها كثير من الصحابة رضي الله عنهم.'],en:['Al‑Baqi’','The city’s historic cemetery east of the Prophet’s Mosque, resting place of many Companions.']}
+];
+const MOVE=[
+ {ic:'i-bus',s:'bus',ok:1,url:'https://www.mda.gov.sa',ar:['حافلات المدينة','شبكة النقل العام: 16 مسارًا و476 محطة توقف، منها مسار من المطار إلى المسجد النبوي ومسار من محطة قطار الحرمين إلى المسجد النبوي.'],en:['Madinah Buses','Public network of 16 routes and 476 stops, including Airport → Prophet’s Mosque and Haramain Station → Prophet’s Mosque routes.']},
+ {ic:'i-bus',s:'tkt',ok:0,url:'',ar:['تذاكر الحافلات','أصبح شراء التذاكر متاحًا عبر تطبيق توكلنا. اشترِ من التطبيق الرسمي فقط.'],en:['Bus tickets','Tickets can now be bought in the Tawakkalna app. Buy only through the official app.']},
+ {ic:'i-train',s:'hhr',ok:1,url:'https://hhr.sa',ar:['قطار الحرمين','يربط المدينة بمكة مرورًا بجدة ومدينة الملك عبدالله الاقتصادية. المواعيد والحجز من الموقع الرسمي.'],en:['Haramain Train','Links Madinah to Makkah via Jeddah and King Abdullah Economic City. Times and booking on the official site.']},
+ {ic:'i-plane',s:'bus',ok:1,url:'https://www.google.com/maps/search/?api=1&query=24.5534,39.7051',ar:['مطار الأمير محمد بن عبدالعزيز','يرتبط بالمسجد النبوي بمسار حافلات مباشر، إضافة إلى سيارات الأجرة.'],en:['Prince Mohammad bin Abdulaziz Airport','Direct bus route to the Prophet’s Mosque, plus taxis.']},
+ {ic:'i-bus',s:'ram',ok:0,url:'',ar:['النقل الترددي في رمضان','حافلات مجانية الرسوم الرمزية تنقل المصلين إلى المسجد النبوي من محطات خارج المنطقة المركزية، ومحور خاص لمسجد قباء. تُعلن مواقع رمضان 1448 رسميًا قبل الشهر.'],en:['Ramadan shuttle buses','Shuttles carry worshippers to the Prophet’s Mosque from stations outside the Central Area, plus a dedicated Quba route. Ramadan 1448 locations are announced officially before the month.']},
+ {ic:'i-car',s:'mda',ok:0,url:'https://www.mda.gov.sa',ar:['سيارات الأجرة والتطبيقات','استخدم سيارات الأجرة المرخصة أو التطبيقات المعروفة، واتفق على الوجهة قبل الركوب.'],en:['Taxis & ride apps','Use licensed taxis or well‑known apps, and confirm your destination before riding.']}
+];
+const NEAR=[['pharmacy','صيدلية','Pharmacy','i-sos'],['hospital','مستشفى','Hospital','i-sos'],['restaurant','مطعم','Restaurant','i-home'],['market','سوق','Market','i-home'],['atm','صراف آلي','ATM','i-pin'],['laundry','مغسلة','Laundry','i-pin']];
+const FAQ=[
+ {k:'مطار airport bandara havalimanı aéroport ایئرپورٹ',ar:'من المطار إلى المسجد النبوي: يوجد مسار حافلات مباشر «المطار – المسجد النبوي» بـ6 محطات، أو سيارات الأجرة.',en:'Airport to the Prophet’s Mosque: take the direct “Airport – Prophet’s Mosque” bus route (6 stops), or a taxi.',s:'bus'},
+ {k:'قطار محطة train kereta tren ٹرین',ar:'من محطة قطار الحرمين إلى المسجد النبوي: مسار حافلات مباشر بـ6 محطات. وللحجز والمواعيد استخدم موقع قطار الحرمين الرسمي.',en:'From the Haramain station: a direct bus route to the Prophet’s Mosque (6 stops). For train times and booking use the official site.',s:'hhr'},
+ {k:'روضة الروضة rawdah raudhah ravza روضہ تصريح permit izin',ar:'زيارة الروضة الشريفة تحتاج تصريحًا مسبقًا يُحجز عبر تطبيق نسك.',en:'Visiting Al‑Rawdah requires a prior permit, booked through the Nusuk app.',s:'nusuk'},
+ {k:'طوارئ اسعاف إسعاف شرطة حريق emergency ambulance police darurat acil urgence ایمرجنسی 911',ar:'رقم الطوارئ الموحد في المدينة المنورة هو 911 للشرطة والإسعاف والدفاع المدني.',en:'In Madinah the unified emergency number is 911 for police, ambulance and civil defence.',s:'cd'},
+ {k:'تذكرة تذاكر باص حافلة ticket bus tiket bilet otobüs بس',ar:'تذاكر حافلات المدينة متاحة عبر تطبيق توكلنا. لا تشترِ من روابط غير رسمية.',en:'Madinah bus tickets are available in the Tawakkalna app. Avoid unofficial links.',s:'tkt'},
+ {k:'قباء quba kuba مشي walk',ar:'مسجد قباء على بعد نحو 3.5 كم جنوب المسجد النبوي، ويمكن الوصول إليه مشيًا أو بالحافلة أو بسيارة أجرة.',en:'Quba Mosque is about 3.5 km south of the Prophet’s Mosque — walk, take a bus or a taxi.',s:'mda'},
+ {k:'صلاة مواعيد prayer times shalat namaz prière نماز',ar:'لا نعرض مواعيد الصلاة كمعلومة مباشرة حاليًا. راجع المصادر الرسمية أو تطبيق نسك.',en:'We don’t show live prayer times yet. Please check official sources or the Nusuk app.',s:'nusuk'},
+ {k:'مفقود مفقودات ضائع lost hilang kayıp perdu گمشدہ',ar:'للمفقودات اسأل موظفي المكان أو فندقك أولًا، وفي حالة الطوارئ اتصل بـ911.',en:'For lost items, ask staff at the place or your hotel first; in an emergency call 911.',s:'cd'},
+ {k:'مستشفى صحة مريض hospital health doctor rumah sakit hastane hôpital ہسپتال',ar:'للخدمات الصحية راجع موقع وزارة الصحة، ولأقرب مستشفى استخدم قسم «قريب مني».',en:'For health services see the Ministry of Health; for the nearest hospital use “Near me”.',s:'moh'},
+ {k:'سبت جمعة friday saturday jumat sabtu cuma cumartesi vendredi samedi جمعہ ہفتہ',ar:'يوم السبت سنّة زيارة قباء، فقد كان النبي ﷺ يأتيه كل سبت ماشيًا وراكبًا. ويوم الجمعة احرص على التبكير للصلاة. شوف قسم «جدولي».',en:'Saturday is the Sunnah day for visiting Quba — the Prophet ﷺ went every Saturday. On Friday go early to Jumu’ah. See “My day”.',s:'sun'},
+ {k:'فندق فنادق حجز سكن شقة hotel booking hotel otel hôtel ہوٹل',ar:'قبل الحجز تحقق من ترخيص الفندق عبر موقع وزارة السياحة، واحجز من القناة الرسمية فقط. رفيق المدينة لا يستلم أموالًا ولا يؤكد حجوزات.',en:'Before booking, verify the hotel licence on the Ministry of Tourism site and book only through official channels. Rafiq never takes payments.',s:'vmt'},
+ {k:'رمضان ترددي ramadan ramazan رمضان shuttle',ar:'في رمضان تعمل حافلات النقل الترددي من محطات خارج المنطقة المركزية إلى المسجد النبوي ومحور خاص لقباء. المواقع تُعلن رسميًا قبل الشهر.',en:'In Ramadan shuttle buses run from stations outside the Central Area to the Prophet’s Mosque, with a Quba route. Locations are announced before the month.',s:'ram'},
+ {k:'فعاليات فعالية شتاء events acara etkinlik événements تقریبات',ar:'فعاليات شتاء المدينة الحقيقية بتواريخها في «جدولي» ← الفعاليات، مثل «سوق الجمعة» كل جمعة و«شروق الجبل» كل سبت.',en:'Real Madinah Winter events with dates are in “My day” → Events, e.g. the Friday Market and Mountain Sunrise every Saturday.',s:'vm'},
+ {k:'وظيفة وظائف عمل job jobs kerja iş emploi ملازمت',ar:'في «رفيق المجتمع» ← وظائف طيبة: ابحث حسب القطاع، أو قدّم عبر جدارات المنصة الوطنية الموحدة للتوظيف.',en:'In Community → Taibah Jobs: search by sector, or apply through Jadarat, the national jobs platform.',s:'jd'},
+ {k:'رسمي حكومي تابع official government resmi',ar:'رفيق المدينة منصة مستقلة غير تابعة لأي جهة حكومية، ونوجهك دائمًا إلى المصدر الرسمي.',en:'Rafiq is independent, not a government service — we always point you to the official source.',s:'mda'}
+];
+const SUG=[[0,'من المطار؟','From the airport?'],[2,'تصريح الروضة','Rawdah permit'],[3,'رقم الطوارئ','Emergency number'],[4,'تذكرة الباص','Bus ticket']];
+const TV=[['home','i-home'],['places','i-dome'],['move','i-bus'],['plan','i-cal'],['near','i-pin'],['help','i-sos']];
+const TC=[['home','i-home'],['jobs','i-bag'],['near','i-pin'],['help','i-sos'],['ask','i-chat']];
+let mode='v',sec='all',savedJ=[];
+const tabs=()=>mode==='c'?TC:TV;
+
+let lang='ar',got=[],where='me';
+try{lang=localStorage.getItem('rq_lang')||'ar';got=JSON.parse(localStorage.getItem('rq_got')||'[]');mode=localStorage.getItem('rq_mode')||'v';savedJ=JSON.parse(localStorage.getItem('rq_sj')||'[]')}catch(e){}
+const $=s=>document.querySelector(s);
+const t=k=>UI[lang][k]??UI.en[k]??k;
+const C=o=>lang==='ar'?o.ar:(o.en);
+const isRtl=()=>lang==='ar'||lang==='ur';
+const save=()=>{try{localStorage.setItem('rq_lang',lang);localStorage.setItem('rq_got',JSON.stringify(got));localStorage.setItem('rq_mode',mode);localStorage.setItem('rq_sj',JSON.stringify(savedJ))}catch(e){}};
+const toast=m=>{const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)};
+const meta=(s,ok)=>`<div class="meta"><span class="${ok?'ok':'wait'}">● ${t(ok?'ok':'wait')}</span><span>${t('src')}: <a href="${SRC[s][1]}" target="_blank" rel="noopener">${SRC[s][0]}</a></span><span>${t('rev')}: <bdi>${REV}</bdi></span></div>`;
+
+function renderPass(){
+ const n=got.length;$('#cnt').textContent=n+'/5';
+ $('#arc').style.strokeDashoffset=213.6*(1-n/5);
+ $('#stamps').innerHTML=PLACES.map((p,i)=>`<span class="st ${got.includes(p.id)?'got':''}" title="${C(p)[0]}">${got.includes(p.id)?'✓':i+1}</span>`).join('');
+}
+function renderPlaces(){
+ $('#places').innerHTML=PLACES.map(p=>{const [n,d]=C(p),g=got.includes(p.id);return `<article class="card"><div class="place"><div class="ico"><svg><use href="#${p.ic}"/></svg></div><div><h3>${n}</h3><p>${d}</p><div class="row"><a class="btn" href="https://www.google.com/maps/search/?api=1&query=${p.ll}" target="_blank" rel="noopener"><svg width="18" height="18"><use href="#i-pin"/></svg>${t('map')}</a><button class="btn ${g?'done':'pri'}" data-stamp="${p.id}" aria-pressed="${g}">${g?'✓ '+t('stamped'):t('stamp')}</button></div></div></div>${meta(p.s,1)}</article>`}).join('');
+}
+function renderMove(){
+ $('#move').innerHTML=MOVE.map(m=>{const [n,d]=C(m);return `<article class="card"><div class="place"><div class="ico"><svg><use href="#${m.ic}"/></svg></div><div><h3>${n}</h3><p>${d}</p>${m.url?`<a class="btn" href="${m.url}" target="_blank" rel="noopener">${t("open")}</a>`:""}</div></div>${meta(m.s,m.ok)}</article>`}).join('');
+}
+function renderNear(){
+ $('#where').innerHTML=[['me',t('nearMe')],['haram',t('nearHaram')]].map(([v,l])=>`<button class="chip ${where===v?'on':''}" data-where="${v}">${l}</button>`).join('');
+ $('#near').innerHTML=NEAR.map(([q,a,e,ic])=>{const qq=where==='me'?q+' near me':q+' near Al-Masjid an-Nabawi Madinah';return `<a class="tile" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(qq)}" target="_blank" rel="noopener" style="text-decoration:none"><svg><use href="#${ic}"/></svg><b>${lang==='ar'?a:e}</b></a>`}).join('');
+}
+function renderHelp(){
+ const L=lang==='ar';
+ $('#help').innerHTML=`<article class="card" style="text-align:center"><div class="big">911</div><p style="margin:6px 0 12px">${L?'الرقم الموحد في المدينة المنورة: الشرطة، الإسعاف، الدفاع المدني':'Unified number in Madinah: police, ambulance, civil defence'}</p><button class="btn pri" data-copy="911">${t('copy')}</button>${meta('cd',1)}</article>
+ <article class="card"><div class="row" style="justify-content:space-between"><div><b>${L?'وزارة الصحة — الاستشارات':'Ministry of Health — advice line'}</b><br><span class="lead" style="font-size:14px">${L?'للاستشارات الصحية غير الطارئة':'Non‑emergency health advice'}</span></div><span class="num">937</span></div><button class="btn" style="margin-top:10px" data-copy="937">${t('copy')}</button>${meta('moh',0)}</article>
+ <div class="note">${L?'في حالة خطر على الحياة اتصل بـ911 فورًا. أرقام بقية المناطق قد تختلف.':'If a life is at risk, call 911 immediately. Numbers in other regions may differ.'}</div>`;
+}
+function addMsg(txt,me,s){const c=$('#chat');c.insertAdjacentHTML('beforeend',`<div class="msg ${me?'me':'bot'}">${txt}${s?`<small>${t('src')}: <a href="${SRC[s][1]}" target="_blank" rel="noopener">${SRC[s][0]}</a> · <bdi>${REV}</bdi></small>`:''}</div>`);if($('#v-ask').classList.contains('on'))c.lastElementChild.scrollIntoView({behavior:'smooth',block:'end'})}
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function answer(q){
+ const w=q.toLowerCase().replace(/[؟?!.,]/g,' ').split(/\s+/).filter(x=>x.length>1);
+ let best=null,score=0;
+ FAQ.forEach(f=>{const k=f.k.toLowerCase();let s=0;w.forEach(x=>{if(k.includes(x.replace(/^ال/,'')))s++});if(s>score){score=s;best=f}});
+ setTimeout(()=>best?addMsg(lang==='ar'?best.ar:best.en,0,best.s):addMsg(t('none'),0,'nusuk'),350);
+}
+function renderAsk(){
+ $('#sugg').innerHTML=SUG.map(([i,a,e])=>`<button class="chip" data-faq="${i}">${lang==='ar'?a:e}</button>`).join('');
+ $('#q').placeholder=t('ph');
+ $('#chat').innerHTML='';addMsg(t('hi'),0);
+}
+function renderJobs(){
+ const L=lang==='ar';$('#jq').placeholder=t('jq');
+ $('#sect').innerHTML=SECTS.filter(x=>x!=='all').map(x=>`<a class="tile ${sec===x?'on':''}" style="text-decoration:none${sec===x?';border-color:var(--gold);border-width:2px':''}" href="${LI(SKW[x])}" target="_blank" rel="noopener"><svg><use href="#i-bag"/></svg><div><b>${t('s_'+x)}</b><br><span>${t('inMad')} ↗</span></div></a>`).join('');
+ $('#offj').innerHTML=OFFJ.map(([a,e,u])=>`<a class="card tile" style="min-height:0;flex-direction:row;align-items:center;text-decoration:none;width:100%" href="${u}" target="_blank" rel="noopener"><svg><use href="#i-bag"/></svg><b style="flex:1">${L?a:e}</b><span>↗</span></a>`).join('');
+}
+function renderRawdah(){
+ const L=lang==='ar';$('#rawdah').innerHTML=`<article class="card"><h3 style="margin:0 0 8px">${t('rawdahT')}</h3><ol class="steps">${(L?RAWDAH.ar:RAWDAH.en).map(x=>`<li><span>${x}</span></li>`).join('')}</ol><a class="btn pri" href="https://www.nusuk.sa" target="_blank" rel="noopener">${t('bookN')}</a>${meta('nusuk',0)}</article>`;
+}
+function renderPlan(){
+ const L=lang==='ar';
+ $('#days').innerHTML=DAYS.map(d=>`<button class="chip ${day===d?'on':''}" data-day="${d}">${t('d_'+d)}${d===todayKey?`<span class="today">${t('todayL')}</span>`:''}</button>`).join('');
+ const p=PLAN[day];
+ if(day==='ev'){const td=D(0);$('#plan').innerHTML=`<p class="lead">${t('evLead')}</p>`+EV.filter(e=>e.e>=td).sort((x,y)=>(x.s>td?x.s:td).localeCompare(y.s>td?y.s:td)).map(e=>{const [a,b,c]=L?e.ar:e.en;return `<article class="card job"><h3>${a}</h3><div class="co">${b}</div><div class="tags"><span class="tag sal">${c}</span></div></article>`}).join('')+`<article class="card"><a class="btn pri" href="https://visitmadinahsa.com/ar/events" target="_blank" rel="noopener">${t('evAll')} ↗</a>${meta('vm',1)}</article>`;return}
+ $('#plan').innerHTML=`<article class="card"><ul class="tl">${(L?p.ar:p.en).map(([a,b])=>`<li><b>${a}</b><span>${b}</span></li>`).join('')}</ul>${p.links?`<div class="row" style="margin-top:10px">${p.links.map(([k,q])=>`<a class="btn" href="${MQ(q)}" target="_blank" rel="noopener"><svg width="18" height="18"><use href="#i-cup"/></svg>${t(k)}</a>`).join('')}</div>`:''}${meta(p.s,p.ok)}</article>`;
+}
+function renderStay(){
+ const L=lang==='ar';
+ $('#stay').innerHTML=`<article class="card"><h3 style="margin:0 0 6px">${L?'قبل ما تحجز':'Before you book'}</h3><ul class="chk">${(L?STAY.ar:STAY.en).map(x=>`<li>${x}</li>`).join('')}</ul><div class="row" style="margin-top:10px"><a class="btn pri" href="https://www.mt.gov.sa" target="_blank" rel="noopener">${L?'تحقق من الترخيص':'Verify licence'}</a><button class="btn" data-copy="930">930 · ${t('copy')}</button></div>${meta('vmt',1)}</article>`;
+}
+function renderMode(){
+ document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('on',b.dataset.mode===mode);b.setAttribute('aria-selected',b.dataset.mode===mode)});
+ $('#homeV').hidden=mode!=='v';$('#homeC').hidden=mode!=='c';
+ document.querySelector('.hero h1').textContent=t(mode==='c'?'hello2':'hello');
+ document.querySelector('.hero p').textContent=t(mode==='c'?'sub2':'sub');
+}
+function renderNav(){
+ const h=(location.hash||'#home').slice(1);
+ $('#nav').innerHTML=tabs().map(([v,ic])=>`<a href="#${v}" class="${h===v?'on':''}" ${h===v?'aria-current="page"':''}><svg><use href="#${ic}"/></svg><span>${t(v)}</span></a>`).join('');
+}
+function show(){
+ const h=(location.hash||'#home').slice(1),v=document.getElementById('v-'+h)?h:'home';
+ document.querySelectorAll('.view').forEach(e=>e.classList.toggle('on',e.id==='v-'+v));
+ renderNav();window.scrollTo({top:v==='home'?0:document.querySelector('main').offsetTop-8,behavior:'smooth'});
+}
+function all(){
+ document.documentElement.lang=lang;document.documentElement.dir=isRtl()?'rtl':'ltr';
+ document.querySelectorAll('[data-t]').forEach(e=>e.textContent=t(e.dataset.t));
+ document.title=t('name');$('#lang').value=lang;
+ const tr=$('#trans');tr.hidden=!UI[lang].tr;tr.textContent=UI[lang].tr||'';
+ renderPass();renderPlaces();renderMove();renderNear();renderHelp();renderAsk();renderJobs();renderRawdah();renderPlan();renderStay();renderMode();renderNav();
+}
+
+$('#lang').addEventListener('change',e=>{lang=e.target.value;save();all()});
+window.addEventListener('hashchange',show);
+document.addEventListener('click',e=>{
+ const md=e.target.closest('[data-mode]');if(md){mode=md.dataset.mode;save();renderMode();location.hash='home';show();return}
+ const go=e.target.closest('[data-go]');if(go){if(go.dataset.sec){sec=go.dataset.sec;renderJobs()}location.hash=go.dataset.go;return}
+ const dy=e.target.closest('[data-day]');if(dy){day=dy.dataset.day;renderPlan();return}
+ const sc=e.target.closest('[data-sec]');if(sc){sec=sc.dataset.sec;renderJobs();return}
+
+ const st=e.target.closest('[data-stamp]');
+ if(st){const id=st.dataset.stamp;const had=got.includes(id);got=had?got.filter(x=>x!==id):[...got,id];save();renderPass();renderPlaces();
+  if(!had){const b=document.querySelector(`[data-stamp="${id}"]`);b&&b.classList.add('pop');if(got.length===5)toast(t('welldone'))}return}
+ const w=e.target.closest('[data-where]');if(w){where=w.dataset.where;renderNear();return}
+ const cp=e.target.closest('[data-copy]');
+ if(cp){const n=cp.dataset.copy;(navigator.clipboard?navigator.clipboard.writeText(n):Promise.reject()).then(()=>toast(t('copied')+' '+n)).catch(()=>toast(n));return}
+ const fq=e.target.closest('[data-faq]');
+ if(fq){const f=FAQ[+fq.dataset.faq];addMsg(esc(fq.textContent),1);setTimeout(()=>addMsg(lang==='ar'?f.ar:f.en,0,f.s),350)}
+});
+$('#askf').addEventListener('submit',e=>{e.preventDefault();const q=$('#q').value.trim();if(!q)return;addMsg(esc(q),1);$('#q').value='';answer(q)});
+
+$('#jsf').addEventListener('submit',e=>{e.preventDefault();const q=$('#jq').value.trim();if(!window.open(LI(q),'_blank'))location.href=LI(q)});
+all();show();
+try{if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+}
+</script>
+</body>
+</html>
